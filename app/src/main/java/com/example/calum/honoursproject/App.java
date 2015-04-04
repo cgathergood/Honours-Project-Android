@@ -1,6 +1,7 @@
 package com.example.calum.honoursproject;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.parse.Parse;
 
@@ -18,5 +19,7 @@ public class App extends Application {
         Parse.enableLocalDatastore(this);
 
         Parse.initialize(this, "nFHu3bnj37q5vzWkItvJutUFOPMLwjC1HbiiAXiC", "TO9nrLJAi0w7X9pipEMjf1XgftWgfkAnuKkdhq6e");
+
+        Log.w("App", "Parse initialised");
     }
 }

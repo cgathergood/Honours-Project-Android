@@ -27,7 +27,6 @@ public class SignUpActivity extends ActionBarActivity {
 
         signUpButton = (Button) findViewById(R.id.signUpButton);
         loginButton = (Button) findViewById(R.id.loginButton);
-
         username = (EditText) findViewById(R.id.usernameText);
         password1 = (EditText) findViewById(R.id.password1Text);
         password2 = (EditText) findViewById(R.id.password2Text);
@@ -41,11 +40,25 @@ public class SignUpActivity extends ActionBarActivity {
                 password1txt = password1.getText().toString();
                 password2txt = password2.getText().toString();
 
-                if (usernametxt == "" || password1txt == "" || password2txt == "") {
+                if (usernametxt.equals("") || password1txt.equals("") || password2txt.equals("")) {
                     Toast.makeText(getApplicationContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                } else if (!password1txt.equals(password2txt)) {
+                    Toast.makeText(getApplicationContext(), "Passwords do not match.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+//        signUpButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                usernametxt = username.getText().toString();
+//                password1txt = password1.getText().toString();
+//                password2txt = password2.getText().toString();
+//
+//                if (usernametxt == "" || password1txt == "" || password2txt == "") {
+//                    Toast.makeText(getApplicationContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
         // Navigate to login screen
         loginButton.setOnClickListener(new View.OnClickListener() {

@@ -35,7 +35,10 @@
         android:hint="@string/username"
         android:layout_above="@+id/password1Text"
         android:layout_alignStart="@+id/password1Text"
-        android:layout_alignEnd="@+id/password1Text" />
+        android:layout_alignEnd="@+id/password1Text"
+        android:lines="1"
+        android:linksClickable="true"
+        android:singleLine="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -45,7 +48,8 @@
         android:id="@+id/password1Text"
         android:hint="@string/password"
         android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/password2Text" />
+        android:layout_alignStart="@+id/password2Text"
+        android:singleLine="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -55,13 +59,15 @@
         android:id="@+id/password2Text"
         android:hint="@string/repeatPassword"
         android:layout_below="@+id/password1Text"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:longClickable="false"
+        android:singleLine="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signUp"
-        android:id="@+id/signupButton"
+        android:id="@+id/signUpButton"
         android:layout_below="@+id/password2Text"
         android:layout_alignEnd="@+id/password2Text"
         android:layout_alignStart="@+id/password2Text" />
@@ -73,7 +79,7 @@
         android:text="@string/signupToLogin"
         android:id="@+id/textView6"
         android:layout_above="@+id/loginButton"
-        android:layout_alignEnd="@+id/signupButton" />
+        android:layout_alignEnd="@+id/signUpButton" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
