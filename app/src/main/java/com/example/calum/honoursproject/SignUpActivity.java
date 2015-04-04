@@ -1,5 +1,6 @@
 package com.example.calum.honoursproject;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -9,6 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 
 public class SignUpActivity extends ActionBarActivity {
@@ -44,21 +49,11 @@ public class SignUpActivity extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 } else if (!password1txt.equals(password2txt)) {
                     Toast.makeText(getApplicationContext(), "Passwords do not match.", Toast.LENGTH_SHORT).show();
+                } else {
+                    signUp(usernametxt, password1txt);
                 }
             }
         });
-//        signUpButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                usernametxt = username.getText().toString();
-//                password1txt = password1.getText().toString();
-//                password2txt = password2.getText().toString();
-//
-//                if (usernametxt == "" || password1txt == "" || password2txt == "") {
-//                    Toast.makeText(getApplicationContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
 
         // Navigate to login screen
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +61,32 @@ public class SignUpActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                 startActivity(intent);
+            }
+        });
+    }
+
+    // Signs up the user
+    private void signUp(String username, String password) {
+        final ParseUser user = new ParseUser();
+
+        user.setUsername(username);
+        user.setPassword(password);
+
+        final ProgressDialog progress = new ProgressDialog(SignUpActivity.this);
+        progress.setTitle("Creating account");
+        progress.setMessage("Please wait...");
+        progress.show();
+
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(getApplicationContext(), "Thanks for signing up " + user.getUsername(), Toast.LENGTH_SHORT).show();
+                    progress.dismiss();
+                } else {
+                    Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                    progress.dismiss();
+                }
             }
         });
     }
