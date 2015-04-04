@@ -3,4 +3,11 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="loginTitle">Welcome to my app!</string>
+    <string name="loginPrompt">Enter your username and password to Login.</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="loginToSignUp">Don\'t have an account?</string>
+    <string name="signUp">Sign Up</string>
 </resources>
