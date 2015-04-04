@@ -55,6 +55,7 @@ public class LoginActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -72,6 +73,8 @@ public class LoginActivity extends ActionBarActivity {
                 if (parseUser != null) {
                     Toast.makeText(getApplicationContext(), "You are logged in " + ParseUser.getCurrentUser().getUsername() + "!", Toast.LENGTH_SHORT).show();
                     progress.dismiss();
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
                     progress.dismiss();
