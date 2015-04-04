@@ -1,25 +1,32 @@
 package com.example.calum.honoursproject;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.parse.Parse;
-import com.parse.ParseObject;
-
+import android.view.View;
+import android.widget.Button;
 
 public class LoginActivity extends ActionBarActivity {
+
+    Button loginButton;
+    Button signUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
-        // Enable Local Datastore.
-        Parse.enableLocalDatastore(this);
+        signUpButton = (Button) findViewById(R.id.signUpButton);
 
-        Parse.initialize(this, "nFHu3bnj37q5vzWkItvJutUFOPMLwjC1HbiiAXiC", "TO9nrLJAi0w7X9pipEMjf1XgftWgfkAnuKkdhq6e");
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
