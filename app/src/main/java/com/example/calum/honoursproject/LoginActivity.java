@@ -33,6 +33,11 @@ public class LoginActivity extends ActionBarActivity {
         username = (EditText) findViewById(R.id.usernameText);
         password = (EditText) findViewById(R.id.passwordText);
 
+        //Check for existing user logged in
+        if (ParseUser.getCurrentUser() != null) {
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        }
+
 
         //Log in
         loginButton.setOnClickListener(new View.OnClickListener() {

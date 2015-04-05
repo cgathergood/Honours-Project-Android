@@ -25,7 +25,7 @@
             android:label="@string/signupTitle" />
         <activity
             android:name=".HomeActivity"
-            android:label="@string/title_activity_home"></activity>
+            android:label="@string/welcome"></activity>
     </application>
 
 </manifest>
