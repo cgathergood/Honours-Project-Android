@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 
@@ -34,6 +35,7 @@ public class HomeActivity extends ActionBarActivity {
                 ParseUser.logOut();
                 Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                 startActivity(intent);
+                Toast.makeText(getApplicationContext(), "You have signed out.", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });

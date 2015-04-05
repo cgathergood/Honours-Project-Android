@@ -67,6 +67,7 @@ public class LoginActivity extends ActionBarActivity {
 
     private void login(String username, String password) {
 
+        // Progress dialog
         final ProgressDialog progress = new ProgressDialog(LoginActivity.this);
         progress.setTitle("Logging in");
         progress.setMessage("Please wait...");
@@ -80,6 +81,7 @@ public class LoginActivity extends ActionBarActivity {
                     progress.dismiss();
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
+                    finish();
                 } else {
                     Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
                     progress.dismiss();
