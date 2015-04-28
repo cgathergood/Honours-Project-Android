@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".App"
@@ -22,7 +23,7 @@
         </activity>
         <activity
             android:name=".SignUpActivity"
-            android:label="@string/signupTitle" />
+            android:label="@string/signupTitle"></activity>
         <activity
             android:name=".HomeActivity"
             android:label="@string/welcome"></activity>

@@ -18,6 +18,7 @@ public class HomeActivity extends ActionBarActivity {
 
     TextView welcome;
     Button signOut;
+    Button gps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class HomeActivity extends ActionBarActivity {
 
         welcome = (TextView) findViewById(R.id.welcomeText);
         signOut = (Button) findViewById(R.id.logoutButton);
+        gps = (Button) findViewById(R.id.gpsButton);
 
         welcome.setText("Hello " + ParseUser.getCurrentUser().getUsername());
 
@@ -37,6 +39,13 @@ public class HomeActivity extends ActionBarActivity {
                 startActivity(intent);
                 Toast.makeText(getApplicationContext(), "You have signed out.", Toast.LENGTH_SHORT).show();
                 finish();
+            }
+        });
+
+        gps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "GPS", Toast.LENGTH_SHORT).show();
             }
         });
     }
