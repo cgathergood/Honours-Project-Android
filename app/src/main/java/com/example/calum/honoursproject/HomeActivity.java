@@ -7,13 +7,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -41,7 +41,7 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
     Button getPhoto;
     ImageView ivImage;
     LocationManager locationManager;
-    int REQUEST_CAMERA = 0, SELECT_FILE = 1;
+    int REQUEST_CAMERA = 1888, SELECT_FILE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,15 +181,18 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_FILE)
                 onSelectFromGalleryResult(data);
-            else if (requestCode == REQUEST_CAMERA)
-                onCaptureImageResult(data);
+            else if (requestCode == REQUEST_CAMERA) {
+                //onCaptureImageResult(data);
+                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                ivImage.setImageBitmap(thumbnail);
+            }
         }
     }
 
     private void onCaptureImageResult(Intent data) {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
         File destination = new File(Environment.getExternalStorageDirectory(),
                 System.currentTimeMillis() + ".jpg");
@@ -232,6 +235,13 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         options.inSampleSize = scale;
         options.inJustDecodeBounds = false;
         bm = BitmapFactory.decodeFile(selectedImagePath, options);
+
+        // This is pretty hacky, fixes the rotation problem for potrait photos only - http://stackoverflow.com/questions/6069122/camera-orientation-issue-in-android
+        if (bm.getWidth() > bm.getHeight()) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90);
+            bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+        }
 
         ivImage.setImageBitmap(bm);
     }
