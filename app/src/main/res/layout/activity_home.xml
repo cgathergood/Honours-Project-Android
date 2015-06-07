@@ -35,4 +35,23 @@
         android:layout_alignStart="@+id/welcomeText"
         android:layout_alignEnd="@+id/welcomeText" />
 
+    <ImageView
+        android:layout_width="500px"
+        android:layout_height="500px"
+        android:scaleType="centerInside"
+        android:id="@+id/imageView"
+        android:src="@mipmap/ic_camera"
+        android:contentDescription="@string/photoDescription"
+        android:layout_below="@+id/welcomeText"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/selectPhoto"
+        android:id="@+id/selectPhotoButton"
+        android:layout_above="@+id/gpsButton"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
