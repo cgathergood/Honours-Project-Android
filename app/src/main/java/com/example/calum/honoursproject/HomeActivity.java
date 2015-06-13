@@ -8,9 +8,11 @@ import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -159,6 +161,7 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         cursor.moveToFirst();
 
         String selectedImagePath = cursor.getString(column_index);
+        cursor.close();
 
         Bitmap bm;
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -173,6 +176,18 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         options.inJustDecodeBounds = false;
         bm = BitmapFactory.decodeFile(selectedImagePath, options);
 
+        // Get orientation from EXIF
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(selectedImagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+
+        bm = rotateBitmap(bm, orientation);
+
         return bm;
     }
 
@@ -180,7 +195,7 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
     private Bitmap photoFromCamera(Intent data) {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        //thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
 
         File destination = new File(Environment.getExternalStorageDirectory(),
                 System.currentTimeMillis() + ".jpg");
@@ -198,6 +213,50 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         }
 
         return thumbnail;
+    }
+
+    // Correct orientation - http://stackoverflow.com/questions/20478765/how-to-get-the-correct-orientation-of-the-image-selected-from-the-default-image/20480741#20480741
+    public static Bitmap rotateBitmap(Bitmap bitmap, int orientation) {
+
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_NORMAL:
+                return bitmap;
+            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                matrix.setScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                matrix.setRotate(180);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_TRANSPOSE:
+                matrix.setRotate(90);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_TRANSVERSE:
+                matrix.setRotate(-90);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                matrix.setRotate(-90);
+                break;
+            default:
+                return bitmap;
+        }
+        try {
+            Bitmap bmRotated = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            bitmap.recycle();
+            return bmRotated;
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
