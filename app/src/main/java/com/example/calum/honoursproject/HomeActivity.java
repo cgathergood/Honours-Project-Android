@@ -153,8 +153,7 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
     private Bitmap photoFromGallery(Intent data) {
         Uri selectedImageUri = data.getData();
         String[] projection = {MediaStore.MediaColumns.DATA};
-        Cursor cursor = managedQuery(selectedImageUri, projection, null, null,
-                null);
+        Cursor cursor = getContentResolver().query(selectedImageUri, projection, null, null, null);
 
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
         cursor.moveToFirst();
