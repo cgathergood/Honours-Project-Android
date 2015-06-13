@@ -39,7 +39,7 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
     Button signOut;
     Button gps;
     Button getPhoto;
-    ImageView ivImage;
+    ImageView userImage;
     LocationManager locationManager;
     int REQUEST_CAMERA = 1888, SELECT_FILE = 1;
 
@@ -56,7 +56,7 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         signOut = (Button) findViewById(R.id.logoutButton);
         gps = (Button) findViewById(R.id.gpsButton);
         getPhoto = (Button) findViewById(R.id.selectPhotoButton);
-        ivImage = (ImageView) findViewById(R.id.imageView);
+        userImage = (ImageView) findViewById(R.id.imageView);
 
         welcome.setText("Hello " + ParseUser.getCurrentUser().getUsername());
 
@@ -100,6 +100,105 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         } else {
             Toast.makeText(getApplicationContext(), "Latitude: " + location.getLatitude() + " \n Longitude: " + location.getLongitude(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void selectImage() {
+        final CharSequence[] items = {"Take Photo", "Choose Existing Photo",
+                "Cancel"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+        builder.setTitle("Choose Photo");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Take Photo")) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                } else if (items[item].equals("Choose Existing Photo")) {
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(
+                            Intent.createChooser(intent, "Select File"),
+                            SELECT_FILE);
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    // Retrieves intent information from either gallery or camera
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Bitmap picture = BitmapFactory.decodeResource(getResources(), R.drawable.ic_camera);
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_FILE)
+                picture = photoFromGallery(data);
+            else if (requestCode == REQUEST_CAMERA) {
+                picture = photoFromCamera(data);
+            }
+
+            // Change imageView to display the new picture
+            userImage.setImageBitmap(picture);
+        }
+    }
+
+    // Photo selected from gallery
+    private Bitmap photoFromGallery(Intent data) {
+        Uri selectedImageUri = data.getData();
+        String[] projection = {MediaStore.MediaColumns.DATA};
+        Cursor cursor = managedQuery(selectedImageUri, projection, null, null,
+                null);
+
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+        cursor.moveToFirst();
+
+        String selectedImagePath = cursor.getString(column_index);
+
+        Bitmap bm;
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(selectedImagePath, options);
+        final int REQUIRED_SIZE = 200;
+        int scale = 1;
+        while (options.outWidth / scale / 2 >= REQUIRED_SIZE
+                && options.outHeight / scale / 2 >= REQUIRED_SIZE)
+            scale *= 2;
+        options.inSampleSize = scale;
+        options.inJustDecodeBounds = false;
+        bm = BitmapFactory.decodeFile(selectedImagePath, options);
+
+        return bm;
+    }
+
+    // Photo from Camera
+    private Bitmap photoFromCamera(Intent data) {
+        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+
+        File destination = new File(Environment.getExternalStorageDirectory(),
+                System.currentTimeMillis() + ".jpg");
+
+        FileOutputStream fo;
+        try {
+            destination.createNewFile();
+            fo = new FileOutputStream(destination);
+            fo.write(bytes.toByteArray());
+            fo.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return thumbnail;
     }
 
     @Override
@@ -147,102 +246,5 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
     @Override
     public void onProviderDisabled(String provider) {
         Toast.makeText(getApplicationContext(), "Please enable GPS.", Toast.LENGTH_SHORT).show();
-    }
-
-    private void selectImage() {
-        final CharSequence[] items = {"Take Photo", "Choose Existing Photo",
-                "Cancel"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-        builder.setTitle("Choose Photo");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Take Photo")) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, REQUEST_CAMERA);
-                } else if (items[item].equals("Choose Existing Photo")) {
-                    Intent intent = new Intent(
-                            Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    intent.setType("image/*");
-                    startActivityForResult(
-                            Intent.createChooser(intent, "Select File"),
-                            SELECT_FILE);
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_FILE)
-                photoFromGallery(data);
-            else if (requestCode == REQUEST_CAMERA) {
-                photoFromCamera(data);
-            }
-        }
-    }
-
-    private void photoFromCamera(Intent data) {
-        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-        File destination = new File(Environment.getExternalStorageDirectory(),
-                System.currentTimeMillis() + ".jpg");
-
-        FileOutputStream fo;
-        try {
-            destination.createNewFile();
-            fo = new FileOutputStream(destination);
-            fo.write(bytes.toByteArray());
-            fo.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        ivImage.setImageBitmap(thumbnail);
-    }
-
-    private void photoFromGallery(Intent data) {
-        Uri selectedImageUri = data.getData();
-        String[] projection = {MediaStore.MediaColumns.DATA};
-        Cursor cursor = managedQuery(selectedImageUri, projection, null, null,
-                null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-        cursor.moveToFirst();
-
-        String selectedImagePath = cursor.getString(column_index);
-
-        Bitmap bm;
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(selectedImagePath, options);
-        final int REQUIRED_SIZE = 200;
-        int scale = 1;
-        while (options.outWidth / scale / 2 >= REQUIRED_SIZE
-                && options.outHeight / scale / 2 >= REQUIRED_SIZE)
-            scale *= 2;
-        options.inSampleSize = scale;
-        options.inJustDecodeBounds = false;
-        bm = BitmapFactory.decodeFile(selectedImagePath, options);
-
-        // This is pretty hacky, fixes the rotation problem for portrait photos only - http://stackoverflow.com/questions/6069122/camera-orientation-issue-in-android
-//        if (bm.getWidth() > bm.getHeight()) {
-//            Matrix matrix = new Matrix();
-//            matrix.postRotate(90);
-//            bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
-//        }
-
-        ivImage.setImageBitmap(bm);
     }
 }
