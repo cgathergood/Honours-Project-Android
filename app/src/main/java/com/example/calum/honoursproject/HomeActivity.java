@@ -141,9 +141,9 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_FILE)
-                picture = photoFromGallery(data);
+                picture = retrievePhoto(data);
             else if (requestCode == REQUEST_CAMERA) {
-                picture = photoFromCamera(data);
+                picture = retrievePhoto(data);
             }
 
             // Change imageView to display the new picture
@@ -152,7 +152,7 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
     }
 
     // Photo selected from gallery
-    private Bitmap photoFromGallery(Intent data) {
+    private Bitmap retrievePhoto(Intent data) {
         Uri selectedImageUri = data.getData();
         String[] projection = {MediaStore.MediaColumns.DATA};
         Cursor cursor = getContentResolver().query(selectedImageUri, projection, null, null, null);
@@ -189,30 +189,6 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         bm = rotateBitmap(bm, orientation);
 
         return bm;
-    }
-
-    // Photo from Camera
-    private Bitmap photoFromCamera(Intent data) {
-        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        //thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-
-        File destination = new File(Environment.getExternalStorageDirectory(),
-                System.currentTimeMillis() + ".jpg");
-
-        FileOutputStream fo;
-        try {
-            destination.createNewFile();
-            fo = new FileOutputStream(destination);
-            fo.write(bytes.toByteArray());
-            fo.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return thumbnail;
     }
 
     // Correct orientation - http://stackoverflow.com/questions/20478765/how-to-get-the-correct-orientation-of-the-image-selected-from-the-default-image/20480741#20480741
