@@ -16,7 +16,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/welcomeText"
         android:elegantTextHeight="false"
-        android:textSize="50dp" />
+        android:textSize="50sp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -36,8 +36,8 @@
         android:layout_alignEnd="@+id/welcomeText" />
 
     <ImageView
-        android:layout_width="640px"
-        android:layout_height="640px"
+        android:layout_width="640dp"
+        android:layout_height="640dp"
         android:scaleType="centerCrop"
         android:id="@+id/imageView"
         android:src="@mipmap/ic_camera"
@@ -45,7 +45,8 @@
         android:layout_gravity="center"
         android:layout_below="@+id/welcomeText"
         android:layout_centerHorizontal="true"
-        android:adjustViewBounds="true" />
+        android:adjustViewBounds="true"
+        android:layout_above="@+id/selectPhotoButton" />
 
     <Button
         android:layout_width="wrap_content"
