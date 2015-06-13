@@ -4,10 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -45,6 +45,10 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Set screen to portrait
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
@@ -83,7 +87,6 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         getPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 selectImage();
             }
         });
@@ -180,16 +183,14 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
 
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_FILE)
-                onSelectFromGalleryResult(data);
+                photoFromGallery(data);
             else if (requestCode == REQUEST_CAMERA) {
-                //onCaptureImageResult(data);
-                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-                ivImage.setImageBitmap(thumbnail);
+                photoFromCamera(data);
             }
         }
     }
 
-    private void onCaptureImageResult(Intent data) {
+    private void photoFromCamera(Intent data) {
         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -212,8 +213,7 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         ivImage.setImageBitmap(thumbnail);
     }
 
-    @SuppressWarnings("deprecation")
-    private void onSelectFromGalleryResult(Intent data) {
+    private void photoFromGallery(Intent data) {
         Uri selectedImageUri = data.getData();
         String[] projection = {MediaStore.MediaColumns.DATA};
         Cursor cursor = managedQuery(selectedImageUri, projection, null, null,
@@ -236,12 +236,12 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         options.inJustDecodeBounds = false;
         bm = BitmapFactory.decodeFile(selectedImagePath, options);
 
-        // This is pretty hacky, fixes the rotation problem for potrait photos only - http://stackoverflow.com/questions/6069122/camera-orientation-issue-in-android
-        if (bm.getWidth() > bm.getHeight()) {
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90);
-            bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
-        }
+        // This is pretty hacky, fixes the rotation problem for portrait photos only - http://stackoverflow.com/questions/6069122/camera-orientation-issue-in-android
+//        if (bm.getWidth() > bm.getHeight()) {
+//            Matrix matrix = new Matrix();
+//            matrix.postRotate(90);
+//            bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
+//        }
 
         ivImage.setImageBitmap(bm);
     }
