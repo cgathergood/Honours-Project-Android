@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -19,6 +20,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +34,7 @@ import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -113,31 +116,47 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
     }
 
     private void postUpload() {
-
+        Log.i("Parse", "upload");
         // Progress dialog
         final ProgressDialog progress = new ProgressDialog(HomeActivity.this);
         progress.setTitle("Uploading your Post");
         progress.setMessage("Please wait...");
-        progress.show();
+        progress.setCancelable(false);
+        //progress.show();
 
         if (location != null) {
-            ParseObject testUpload = new ParseObject("TestUpload");
+            ParseObject testUpload = new ParseObject("PhotoTest");
             testUpload.put("user", ParseUser.getCurrentUser().getUsername());
             testUpload.put("lat", location.getLatitude());
             testUpload.put("lon", location.getLongitude());
+            testUpload.put("platform", "Android");
 
-            testUpload.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        progress.dismiss();
-                        Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
-                    } else {
-                        progress.dismiss();
-                        Toast.makeText(getApplicationContext(), "Upload Unsuccessful", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+            // Image
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] image = stream.toByteArray();
+            ParseFile pFile = new ParseFile("UserImage.png", image);
+
+            Log.i("Parse", String.valueOf(picture.getByteCount()));
+
+            pFile.saveInBackground();
+
+            testUpload.put("image", pFile);
+            testUpload.saveInBackground();
+            Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
+
+//            testUpload.saveInBackground(new SaveCallback() {
+//                @Override
+//                public void done(ParseException e) {
+//                    if (e == null) {
+//                        progress.dismiss();
+//                        Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        progress.dismiss();
+//                        Toast.makeText(getApplicationContext(), "Upload Unsuccessful", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            });
         }
     }
 
