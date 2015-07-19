@@ -41,6 +41,7 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
     Button signOut;
     Button gps;
     Button getPhoto;
+    Button post;
     ImageView userImage;
     LocationManager locationManager;
     int REQUEST_CAMERA = 1888, SELECT_FILE = 1;
@@ -59,6 +60,7 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         gps = (Button) findViewById(R.id.gpsButton);
         getPhoto = (Button) findViewById(R.id.selectPhotoButton);
         userImage = (ImageView) findViewById(R.id.imageView);
+        post = (Button) findViewById(R.id.postButton);
 
         welcome.setText("Hello " + ParseUser.getCurrentUser().getUsername());
 
@@ -90,6 +92,14 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
             @Override
             public void onClick(View v) {
                 selectImage();
+            }
+        });
+
+        //Post
+        post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Button Clicked", Toast.LENGTH_SHORT).show();
             }
         });
     }
