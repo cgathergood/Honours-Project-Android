@@ -1,6 +1,7 @@
 package com.example.calum.honoursproject;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +27,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -43,7 +49,9 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
     Button getPhoto;
     Button post;
     ImageView userImage;
+    Bitmap picture;
     LocationManager locationManager;
+    Location location;
     int REQUEST_CAMERA = 1888, SELECT_FILE = 1;
 
     @Override
@@ -99,13 +107,42 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Button Clicked", Toast.LENGTH_SHORT).show();
+                postUpload();
             }
         });
     }
 
+    private void postUpload() {
+
+        // Progress dialog
+        final ProgressDialog progress = new ProgressDialog(HomeActivity.this);
+        progress.setTitle("Uploading your Post");
+        progress.setMessage("Please wait...");
+        progress.show();
+
+        if (location != null) {
+            ParseObject testUpload = new ParseObject("TestUpload");
+            testUpload.put("user", ParseUser.getCurrentUser().getUsername());
+            testUpload.put("lat", location.getLatitude());
+            testUpload.put("lon", location.getLongitude());
+
+            testUpload.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        progress.dismiss();
+                        Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
+                    } else {
+                        progress.dismiss();
+                        Toast.makeText(getApplicationContext(), "Upload Unsuccessful", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
     private void showCurrentLocation() {
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         if (location == null) {
             Toast.makeText(getApplicationContext(), "Please enable GPS.", Toast.LENGTH_SHORT).show();
@@ -146,7 +183,7 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Bitmap picture = BitmapFactory.decodeResource(getResources(), R.drawable.ic_camera);
+        picture = BitmapFactory.decodeResource(getResources(), R.drawable.ic_camera);
 
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
