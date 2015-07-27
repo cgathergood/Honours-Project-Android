@@ -54,7 +54,7 @@
         android:text="@string/selectPhoto"
         android:id="@+id/selectPhotoButton"
         android:layout_above="@+id/gpsButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignStart="@+id/gpsButton" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -65,5 +65,13 @@
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/gpsButton"
         android:layout_toEndOf="@+id/logoutButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MAP"
+        android:id="@+id/mapButton"
+        android:layout_above="@+id/gpsButton"
+        android:layout_toEndOf="@+id/selectPhotoButton" />
 
 </RelativeLayout>

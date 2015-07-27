@@ -44,6 +44,7 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
     Button gps;
     Button getPhoto;
     Button post;
+    Button map;
     ImageView userImage;
     Bitmap picture;
     LocationManager locationManager;
@@ -65,6 +66,7 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         getPhoto = (Button) findViewById(R.id.selectPhotoButton);
         userImage = (ImageView) findViewById(R.id.imageView);
         post = (Button) findViewById(R.id.postButton);
+        map = (Button) findViewById(R.id.mapButton);
 
         welcome.setText("Hello " + ParseUser.getCurrentUser().getUsername());
 
@@ -104,6 +106,14 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
             @Override
             public void onClick(View v) {
                 postUpload();
+            }
+        });
+
+        //Map
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Map Goes here!", Toast.LENGTH_SHORT).show();
             }
         });
     }
