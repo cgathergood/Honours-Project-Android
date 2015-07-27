@@ -10,16 +10,14 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.Environment;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,16 +29,11 @@ import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 
@@ -143,21 +136,25 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
 
             testUpload.put("image", pFile);
             testUpload.saveInBackground();
-            Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
 
-//            testUpload.saveInBackground(new SaveCallback() {
-//                @Override
-//                public void done(ParseException e) {
-//                    if (e == null) {
-//                        progress.dismiss();
-//                        Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        progress.dismiss();
-//                        Toast.makeText(getApplicationContext(), "Upload Unsuccessful", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            });
+            testUpload.saveInBackground(new SaveCallback() {
+                public void done(ParseException e) {
+                    if (e == null) {
+                        myObjectSavedSuccessfully();
+                    } else {
+                        myObjectSaveDidNotSucceed();
+                    }
+                }
+            });
         }
+    }
+
+    private void myObjectSavedSuccessfully() {
+        Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
+    }
+
+    private void myObjectSaveDidNotSucceed() {
+        Toast.makeText(getApplicationContext(), "Upload Unsuccessful - please try again", Toast.LENGTH_SHORT).show();
     }
 
     private void showCurrentLocation() {
