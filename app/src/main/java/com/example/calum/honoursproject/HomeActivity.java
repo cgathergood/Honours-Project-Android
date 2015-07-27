@@ -113,7 +113,8 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Map Goes here!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomeActivity.this, MapActivity.class);
+                startActivity(intent);
             }
         });
     }

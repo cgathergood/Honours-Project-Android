@@ -10,10 +10,10 @@
 
     <application
         android:name=".App"
-        android:screenOrientation="portrait"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:screenOrientation="portrait"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".LoginActivity"
@@ -26,10 +26,14 @@
         </activity>
         <activity
             android:name=".SignUpActivity"
-            android:label="@string/signupTitle"></activity>
+            android:label="@string/signupTitle" />
         <activity
             android:name=".HomeActivity"
-            android:label="@string/welcome"></activity>
+            android:label="@string/welcome" />
+        <activity
+            android:name=".MapActivity"
+            android:label="@string/title_activity_map" >
+        </activity>
     </application>
 
 </manifest>
