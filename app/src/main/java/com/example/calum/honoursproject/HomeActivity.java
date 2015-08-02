@@ -121,12 +121,6 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
 
     private void postUpload() {
         Log.i("Parse", "upload");
-        // Progress dialog
-        final ProgressDialog progress = new ProgressDialog(HomeActivity.this);
-        progress.setTitle("Uploading your Post");
-        progress.setMessage("Please wait...");
-        progress.setCancelable(false);
-        //progress.show();
 
         if (location != null) {
             ParseObject testUpload = new ParseObject("PhotoTest");
@@ -141,12 +135,9 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
             byte[] image = stream.toByteArray();
             ParseFile pFile = new ParseFile("UserImage.png", image);
 
-            Log.i("Parse", String.valueOf(picture.getByteCount()));
-
             pFile.saveInBackground();
 
             testUpload.put("image", pFile);
-            testUpload.saveInBackground();
 
             testUpload.saveInBackground(new SaveCallback() {
                 public void done(ParseException e) {
@@ -157,10 +148,23 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
                     }
                 }
             });
+        } else {
+            Toast.makeText(getApplicationContext(), "Please enable GPS.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void myObjectSavedSuccessfully() {
+        //This needs to be cleaned up
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Upload Successful!")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
         Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
     }
 
