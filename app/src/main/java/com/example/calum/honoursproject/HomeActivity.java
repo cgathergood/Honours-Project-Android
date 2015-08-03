@@ -120,8 +120,6 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
     }
 
     private void postUpload() {
-        Log.i("Parse", "upload");
-
         if (location != null) {
             ParseObject testUpload = new ParseObject("PhotoTest");
             testUpload.put("user", ParseUser.getCurrentUser().getUsername());
@@ -129,14 +127,11 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
             testUpload.put("lon", location.getLongitude());
             testUpload.put("platform", "Android");
 
-            // Image
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] image = stream.toByteArray();
             ParseFile pFile = new ParseFile("UserImage.png", image);
-
             pFile.saveInBackground();
-
             testUpload.put("image", pFile);
 
             testUpload.saveInBackground(new SaveCallback() {
