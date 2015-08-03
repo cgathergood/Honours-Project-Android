@@ -154,22 +154,23 @@ public class HomeActivity extends ActionBarActivity implements LocationListener 
     }
 
     private void myObjectSavedSuccessfully() {
-        //This needs to be cleaned up
+        okAlert("Upload Successful!");
+    }
+
+    private void myObjectSaveDidNotSucceed() {
+        okAlert("Upload Unsuccessful - please try again.");
+    }
+
+    private void okAlert(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Upload Successful!")
+        builder.setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //do things
                     }
                 });
         AlertDialog alert = builder.create();
         alert.show();
-        Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
-    }
-
-    private void myObjectSaveDidNotSucceed() {
-        Toast.makeText(getApplicationContext(), "Upload Unsuccessful - please try again", Toast.LENGTH_SHORT).show();
     }
 
     private void showCurrentLocation() {
