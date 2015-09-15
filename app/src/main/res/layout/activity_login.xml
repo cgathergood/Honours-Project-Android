@@ -38,6 +38,7 @@
         android:layout_alignEnd="@+id/textView2"
         android:editable="true"
         android:hint="@string/username"
+        android:text="cg"
         android:singleLine="true" />
 
     <EditText
@@ -47,6 +48,7 @@
         android:ems="10"
         android:id="@+id/passwordText"
         android:hint="@string/password"
+        android:text="c"
         android:singleLine="true"
         android:layout_below="@+id/usernameText"
         android:layout_alignStart="@+id/usernameText" />
