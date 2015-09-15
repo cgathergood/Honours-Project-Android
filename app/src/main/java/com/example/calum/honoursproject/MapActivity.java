@@ -10,6 +10,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.util.List;
 
 
 public class MapActivity extends ActionBarActivity {
@@ -21,7 +27,6 @@ public class MapActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         setUpMapIfNeeded();
-        getPosts();
     }
 
     @Override
@@ -61,10 +66,19 @@ public class MapActivity extends ActionBarActivity {
 
     private void setUpMap() {
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        getPosts();
         mMap.setMyLocationEnabled(true);
     }
 
     private void getPosts() {
-        Log.d("Test", "getPosts here");
+        ParseQuery<ParseObject> query = new ParseQuery<>("PhotoTest");
+        try {
+            List<ParseObject> posts = query.find();
+            for (ParseObject p : posts) {
+                mMap.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).title(p.getString("user")));
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
