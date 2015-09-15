@@ -2,6 +2,7 @@ package com.example.calum.honoursproject;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,6 +21,7 @@ public class MapActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         setUpMapIfNeeded();
+        getPosts();
     }
 
     @Override
@@ -60,5 +62,9 @@ public class MapActivity extends ActionBarActivity {
     private void setUpMap() {
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setMyLocationEnabled(true);
+    }
+
+    private void getPosts() {
+        Log.d("Test", "getPosts here");
     }
 }
