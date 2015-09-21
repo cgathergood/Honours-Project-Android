@@ -75,7 +75,7 @@ public class MapActivity extends ActionBarActivity {
         try {
             List<ParseObject> posts = query.find();
             for (ParseObject p : posts) {
-                mMap.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).title(p.getString("user") + ", " + p.getString("platform")));
+                mMap.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).title(p.getString("user")).snippet(p.getString("platform")));
             }
         } catch (ParseException e) {
             e.printStackTrace();
