@@ -8,6 +8,8 @@ import android.view.MenuItem;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.Parse;
@@ -75,7 +77,12 @@ public class MapActivity extends ActionBarActivity {
         try {
             List<ParseObject> posts = query.find();
             for (ParseObject p : posts) {
-                mMap.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).title(p.getString("user")).snippet(p.getString("platform")));
+
+                if (p.getString("platform").equals("Android")) {
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).title(p.getString("user")).snippet(p.getString("platform")).icon(BitmapDescriptorFactory.defaultMarker(74)));
+                } else {
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).title(p.getString("user")).snippet(p.getString("platform")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                }
             }
         } catch (ParseException e) {
             e.printStackTrace();
