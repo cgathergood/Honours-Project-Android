@@ -21,8 +21,10 @@
         android:src="@drawable/plus"
         android:layout_marginBottom="@dimen/fab_button_margin_bottom"
         android:layout_marginEnd="@dimen/fab_button_margin_right"
-        app:elevation="16dp"
+        app:elevation="6dp"
         app:pressedTranslationZ="12dp"
+        app:backgroundTint="@color/accent"
+        app:rippleColor="@color/primary"
         app:borderWidth="0dp"/>
 
 </RelativeLayout>
