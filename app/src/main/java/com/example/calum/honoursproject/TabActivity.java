@@ -15,9 +15,9 @@ public class TabActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tab);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Feed"));
-        tabLayout.addTab(tabLayout.newTab().setText("Post"));
-        tabLayout.addTab(tabLayout.newTab().setText("Map"));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_feed));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_post));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_map));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -40,6 +40,8 @@ public class TabActivity extends AppCompatActivity {
 
             }
         });
+
+        getSupportActionBar().setElevation(0);
     }
 
     @Override

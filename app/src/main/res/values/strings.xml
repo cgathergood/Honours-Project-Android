@@ -22,7 +22,10 @@
     <string name="photoDescription">User Selected Image</string>
     <string name="selectPhoto">Select Photo</string>
     <string name="title_activity_map">MapActivity</string>
-    <string name="title_activity_tab">TabActivity</string>
+    <string name="title_activity_tab">InstaMap</string>
+    <string name="tab_feed">Feed</string>
+    <string name="tab_post">Post</string>
+    <string name="tab_map">Map</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
