@@ -27,7 +27,6 @@
         android:layout_marginEnd="@dimen/fab_button_margin_right"
         app:elevation="6dp"
         app:pressedTranslationZ="12dp"
-        app:backgroundTint="@color/accent"
         app:rippleColor="@color/primary"
         app:borderWidth="0dp"/>
 
