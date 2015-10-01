@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -26,7 +27,7 @@ public class FeedFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v =  inflater.inflate(R.layout.fragment_feed, container, false);
+        View v = inflater.inflate(R.layout.fragment_feed, container, false);
 
         listView = (ListView) v.findViewById(R.id.listView);
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
@@ -51,14 +52,16 @@ public class FeedFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(true);
         ParseQuery<ParseObject> query = new ParseQuery<>("PhotoTest");
         query.orderByDescending("createdAt");
-        try {
-            List<ParseObject> posts = query.find();
-            for(int i=0; i<posts.size(); i++){
-                postList.add(i,posts.get(i));
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (list.size() > 0) {
+                    for (int i = 0; i < list.size(); i++) {
+                        postList.add(i, list.get(i));
+                    }
+                }
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        });
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
     }
