@@ -12,6 +12,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -42,27 +43,36 @@ public class MapFragment extends Fragment {
 
         map = mMapView.getMap();
 
-        getPosts();
-
         // Perform any camera updates here
         return v;
     }
 
     private void getPosts() {
         ParseQuery<ParseObject> query = new ParseQuery<>("PhotoTest");
-        try {
-            List<ParseObject> posts = query.find();
-            for (ParseObject p : posts) {
 
-                if (p.getString("platform").equals("Android")) {
-                    map.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).title(p.getString("user")).snippet(p.getString("platform")).icon(BitmapDescriptorFactory.defaultMarker(74)));
-                } else {
-                    map.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).title(p.getString("user")).snippet(p.getString("platform")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                }
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                populateMap(list);
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
+        });
+    }
+
+    private void populateMap(List<ParseObject> list) {
+        for (ParseObject p : list) {
+
+            if (p.getString("platform").equals("Android")) {
+                map.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).title(p.getString("user")).snippet(p.getString("platform")).icon(BitmapDescriptorFactory.defaultMarker(74)));
+            } else {
+                map.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).title(p.getString("user")).snippet(p.getString("platform")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            }
         }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getPosts();
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
