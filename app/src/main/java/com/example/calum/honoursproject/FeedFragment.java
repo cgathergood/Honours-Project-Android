@@ -40,19 +40,16 @@ public class FeedFragment extends Fragment {
     }
 
     private void getPosts() {
-        Log.d("test", "Post function");
         ParseQuery<ParseObject> query = new ParseQuery<>("PhotoTest");
         query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-                Log.d("test", String.valueOf(list.size()) + " posts received");
                 if (list.size() > 0) {
                     for (int i = 0; i < list.size(); i++) {
                         postList.add(i, list.get(i));
                     }
                 }
-                Log.d("test", "notified adapter");
                 adapter.notifyDataSetChanged();
             }
         });
