@@ -15,12 +15,12 @@ import java.util.List;
 /**
  * Created by Calum on 01/10/2015.
  */
-public class SwipeListAdapter extends BaseAdapter {
+public class ListViewAdapter extends BaseAdapter {
     private Activity activity;
     private LayoutInflater inflater;
     private List<ParseObject> postList;
 
-    public SwipeListAdapter(Activity activity, List<ParseObject> postList) {
+    public ListViewAdapter(Activity activity, List<ParseObject> postList) {
         this.activity = activity;
         this.postList = postList;
     }
