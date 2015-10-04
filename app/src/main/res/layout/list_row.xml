@@ -1,27 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:width="50dp"
+        android:height="50dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_camera" />
 
     <TextView
         android:id="@+id/serial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="5dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageView2"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:padding="25dp"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:text="Username" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/serial"
-        android:paddingLeft="20dp"
-        android:textSize="18dp"
-        android:textStyle="bold" />
+        android:layout_alignStart="@+id/imageView2"
+        android:layout_below="@+id/serial"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="Platform" />
 
 </RelativeLayout>
