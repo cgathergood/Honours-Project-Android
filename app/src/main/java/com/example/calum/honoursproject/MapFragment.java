@@ -68,6 +68,7 @@ public class MapFragment extends Fragment {
         }
 
         map = mMapView.getMap();
+        map.setMyLocationEnabled(true);
 
         // Perform any camera updates here
         return v;
