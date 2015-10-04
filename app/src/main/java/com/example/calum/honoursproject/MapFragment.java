@@ -84,6 +84,9 @@ public class MapFragment extends Fragment {
                 TextView tvUsername = (TextView) v.findViewById(R.id.username);
                 TextView tvPlatform = (TextView) v.findViewById(R.id.platform);
 
+                tvUsername.setText(user);
+                tvPlatform.setText(platform);
+
                 return v;
             }
 
