@@ -8,12 +8,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -69,6 +71,27 @@ public class MapFragment extends Fragment {
 
         map = mMapView.getMap();
         map.setMyLocationEnabled(true);
+
+        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                View v = inflater.inflate(R.layout.map_marker_info, null);
+
+                String user = marker.getTitle();
+                String platform = marker.getSnippet();
+
+                TextView tvUsername = (TextView) v.findViewById(R.id.username);
+                TextView tvPlatform = (TextView) v.findViewById(R.id.platform);
+
+                return v;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                return null;
+            }
+        });
 
         // Perform any camera updates here
         return v;
