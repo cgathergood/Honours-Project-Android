@@ -6,7 +6,7 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/postedImage"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_alignParentTop="true"
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/imageView2"
+        android:layout_below="@+id/postedImage"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:padding="25dp"
@@ -33,7 +33,7 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/imageView2"
+        android:layout_alignStart="@+id/postedImage"
         android:layout_below="@+id/serial"
         android:textSize="18sp"
         android:textStyle="bold"

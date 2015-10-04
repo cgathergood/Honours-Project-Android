@@ -2,12 +2,18 @@ package com.example.calum.honoursproject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.GetDataCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 
 import java.util.List;
@@ -49,11 +55,22 @@ public class ListViewAdapter extends BaseAdapter {
         if (convertView == null)
             convertView = inflater.inflate(R.layout.list_row, null);
 
+
         TextView serial = (TextView) convertView.findViewById(R.id.serial);
         TextView title = (TextView) convertView.findViewById(R.id.title);
+        final ImageView imageView = (ImageView) convertView.findViewById(R.id.postedImage);
 
         serial.setText(postList.get(position).getString("user"));
         title.setText(postList.get(position).getString("platform"));
+
+        ParseFile image = (ParseFile) postList.get(position).get("image");
+        image.getDataInBackground(new GetDataCallback() {
+            @Override
+            public void done(byte[] bytes, ParseException e) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                imageView.setImageBitmap(bmp);
+            }
+        });
 
         return convertView;
     }

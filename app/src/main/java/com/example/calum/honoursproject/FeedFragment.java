@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -68,6 +69,7 @@ public class FeedFragment extends Fragment {
     private void getPosts() {
         ParseQuery<ParseObject> query = new ParseQuery<>("PhotoTest");
         query.orderByDescending("createdAt");
+        //query.setLimit(1);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
