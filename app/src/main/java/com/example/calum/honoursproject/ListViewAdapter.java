@@ -16,6 +16,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,10 +59,14 @@ public class ListViewAdapter extends BaseAdapter {
 
         TextView serial = (TextView) convertView.findViewById(R.id.serial);
         TextView title = (TextView) convertView.findViewById(R.id.title);
+        TextView time = (TextView) convertView.findViewById(R.id.time);
         final ImageView imageView = (ImageView) convertView.findViewById(R.id.postedImage);
 
         serial.setText(postList.get(position).getString("user"));
         title.setText(postList.get(position).getString("platform"));
+
+        Date createdDate = postList.get(position).getCreatedAt();
+        time.setText(createdDate.toString());
 
         ParseFile image = (ParseFile) postList.get(position).get("image");
         image.getDataInBackground(new GetDataCallback() {
