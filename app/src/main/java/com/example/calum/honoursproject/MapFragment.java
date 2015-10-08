@@ -1,7 +1,10 @@
 package com.example.calum.honoursproject;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +22,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -83,10 +88,19 @@ public class MapFragment extends Fragment {
 
                 ParseObject parseObject = markerMap.get(marker);
 
-                ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
+                final ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
                 TextView tvUsername = (TextView) v.findViewById(R.id.username);
                 TextView tvPlatform = (TextView) v.findViewById(R.id.platform);
 
+                ParseFile image = (ParseFile) parseObject.get("image");
+                image.getDataInBackground(new GetDataCallback() {
+                    @Override
+                    public void done(byte[] bytes, ParseException e) {
+                        Log.d("test", "Got Photo" + bytes.toString());
+                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        imageView.setImageBitmap(bmp);
+                    }
+                });
                 tvUsername.setText(parseObject.getString("user"));
                 tvPlatform.setText(parseObject.getString("platform"));
 
@@ -105,6 +119,7 @@ public class MapFragment extends Fragment {
 
     private void getPosts() {
         ParseQuery<ParseObject> query = new ParseQuery<>("PhotoTest");
+        query.setLimit(1);
 
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
