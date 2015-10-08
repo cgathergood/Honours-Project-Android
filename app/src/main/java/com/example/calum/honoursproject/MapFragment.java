@@ -38,11 +38,19 @@ public class MapFragment extends Fragment {
 
     private MapView mMapView;
     private GoogleMap map;
-    private HashMap<Marker, ParseObject> markerMap = new HashMap<Marker, ParseObject>();
+    private HashMap<Marker, ParseObject> markerMap = new HashMap<>();
+    protected ImageLoader imageLoader = ImageLoader.getInstance();
+    private DisplayImageOptions displayImageOptions;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+
+        imageLoader = ImageLoader.getInstance();
+        displayImageOptions = new DisplayImageOptions.Builder().cacheInMemory(true)
+                .showImageForEmptyUri(R.drawable.ic_camera)
+                .showImageOnFail(R.drawable.ic_camera)
+                .showImageOnLoading(R.drawable.ic_camera).build();
         super.onCreate(savedInstanceState);
     }
 
@@ -95,16 +103,9 @@ public class MapFragment extends Fragment {
                 TextView tvUsername = (TextView) v.findViewById(R.id.username);
                 TextView tvPlatform = (TextView) v.findViewById(R.id.platform);
 
-                final ImageLoader imageLoader = ImageLoader.getInstance();
-                final DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                        .cacheOnDisc(true).resetViewBeforeLoading(true)
-                        .showImageForEmptyUri(R.drawable.ic_camera)
-                        .showImageOnFail(R.drawable.ic_camera)
-                        .showImageOnLoading(R.drawable.ic_camera).build();
-
                 if (imageView.getDrawable() != getResources().getDrawable(R.drawable.ic_camera)) {
                     ParseFile image = (ParseFile) parseObject.get("image");
-                    imageLoader.displayImage(image.getUrl(), imageView, options, new SimpleImageLoadingListener() {
+                    imageLoader.displayImage(image.getUrl(), imageView, displayImageOptions, new SimpleImageLoadingListener() {
                         @Override
                         public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                             super.onLoadingComplete(imageUri, view, loadedImage);
