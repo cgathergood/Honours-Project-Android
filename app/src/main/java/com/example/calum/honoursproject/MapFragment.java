@@ -21,6 +21,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -33,7 +36,7 @@ import java.util.List;
 
 public class MapFragment extends Fragment {
 
-    MapView mMapView;
+    private MapView mMapView;
     private GoogleMap map;
     private HashMap<Marker, ParseObject> markerMap = new HashMap<Marker, ParseObject>();
 
@@ -82,7 +85,7 @@ public class MapFragment extends Fragment {
 
         map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
-            public View getInfoWindow(Marker marker) {
+            public View getInfoWindow(final Marker marker) {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 View v = inflater.inflate(R.layout.map_marker_info, null);
 
@@ -92,15 +95,24 @@ public class MapFragment extends Fragment {
                 TextView tvUsername = (TextView) v.findViewById(R.id.username);
                 TextView tvPlatform = (TextView) v.findViewById(R.id.platform);
 
-                ParseFile image = (ParseFile) parseObject.get("image");
-                image.getDataInBackground(new GetDataCallback() {
-                    @Override
-                    public void done(byte[] bytes, ParseException e) {
-                        Log.d("test", "Got Photo" + bytes.toString());
-                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        imageView.setImageBitmap(bmp);
-                    }
-                });
+                final ImageLoader imageLoader = ImageLoader.getInstance();
+                final DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+                        .cacheOnDisc(true).resetViewBeforeLoading(true)
+                        .showImageForEmptyUri(R.drawable.ic_camera)
+                        .showImageOnFail(R.drawable.ic_camera)
+                        .showImageOnLoading(R.drawable.ic_camera).build();
+
+                if (imageView.getDrawable() != getResources().getDrawable(R.drawable.ic_camera)) {
+                    ParseFile image = (ParseFile) parseObject.get("image");
+                    imageLoader.displayImage(image.getUrl(), imageView, options, new SimpleImageLoadingListener() {
+                        @Override
+                        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                            super.onLoadingComplete(imageUri, view, loadedImage);
+                            getInfoContents(marker);
+                        }
+                    });
+                }
+
                 tvUsername.setText(parseObject.getString("user"));
                 tvPlatform.setText(parseObject.getString("platform"));
 
@@ -109,6 +121,11 @@ public class MapFragment extends Fragment {
 
             @Override
             public View getInfoContents(Marker marker) {
+
+                if (marker != null && marker.isInfoWindowShown()) {
+                    marker.hideInfoWindow();
+                    marker.showInfoWindow();
+                }
                 return null;
             }
         });
@@ -119,7 +136,6 @@ public class MapFragment extends Fragment {
 
     private void getPosts() {
         ParseQuery<ParseObject> query = new ParseQuery<>("PhotoTest");
-        query.setLimit(1);
 
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
