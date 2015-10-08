@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -22,12 +23,14 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class MapFragment extends Fragment {
 
     MapView mMapView;
     private GoogleMap map;
+    private HashMap<Marker, ParseObject> markerMap = new HashMap<Marker, ParseObject>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,14 +81,14 @@ public class MapFragment extends Fragment {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 View v = inflater.inflate(R.layout.map_marker_info, null);
 
-                String user = marker.getTitle();
-                String platform = marker.getSnippet();
+                ParseObject parseObject = markerMap.get(marker);
 
+                ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
                 TextView tvUsername = (TextView) v.findViewById(R.id.username);
                 TextView tvPlatform = (TextView) v.findViewById(R.id.platform);
 
-                tvUsername.setText(user);
-                tvPlatform.setText(platform);
+                tvUsername.setText(parseObject.getString("user"));
+                tvPlatform.setText(parseObject.getString("platform"));
 
                 return v;
             }
@@ -115,9 +118,11 @@ public class MapFragment extends Fragment {
         for (ParseObject p : list) {
 
             if (p.getString("platform").equals("Android")) {
-                map.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).title(p.getString("user")).snippet(p.getString("platform")).icon(BitmapDescriptorFactory.defaultMarker(74)));
+                Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).icon(BitmapDescriptorFactory.defaultMarker(74)));
+                markerMap.put(marker, p);
             } else {
-                map.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).title(p.getString("user")).snippet(p.getString("platform")).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(p.getDouble("lat"), p.getDouble("lon"))).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                markerMap.put(marker, p);
             }
         }
     }
