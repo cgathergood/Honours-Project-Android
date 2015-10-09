@@ -16,7 +16,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -25,6 +27,7 @@ public class PostFragment extends Fragment {
     ImageView userImage;
     Bitmap picture;
     int REQUEST_CAMERA = 1888, SELECT_FILE = 1;
+    Button post;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,11 +43,19 @@ public class PostFragment extends Fragment {
         // Get UI elements
         final FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         userImage = (ImageView) getActivity().findViewById(R.id.imageView);
-
+        post = (Button) getActivity().findViewById(R.id.postButton);
+        post.setEnabled(true);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImage();
+            }
+        });
+
+        post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(),"Post goes here", Toast.LENGTH_SHORT).show();
             }
         });
     }
