@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.location.Location;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,20 +21,39 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+
 import java.io.IOException;
 
-public class PostFragment extends Fragment {
+public class PostFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     ImageView userImage;
     Bitmap picture;
     int REQUEST_CAMERA = 1888, SELECT_FILE = 1;
     Button post;
+    private Location mLastLocation;
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        buildGoogleApiClient();
+        mGoogleApiClient.connect();
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_post, container, false);
+    }
+
+    private synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
     }
 
     @Override
@@ -55,7 +75,7 @@ public class PostFragment extends Fragment {
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"Post goes here", Toast.LENGTH_SHORT).show();
+               displayLocation();
             }
         });
     }
@@ -189,5 +209,30 @@ public class PostFragment extends Fragment {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private void displayLocation(){
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        if(mLastLocation != null){
+            double latitude = mLastLocation.getLatitude();
+            double longitude = mLastLocation.getLongitude();
+            Toast.makeText(getContext(), latitude + ", " + longitude, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        displayLocation();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 }
