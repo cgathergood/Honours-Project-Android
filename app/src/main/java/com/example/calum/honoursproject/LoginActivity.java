@@ -38,7 +38,7 @@ public class LoginActivity extends ActionBarActivity {
 
         //Check for existing user logged in
         if (ParseUser.getCurrentUser() != null) {
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            Intent intent = new Intent(LoginActivity.this, TabActivity.class);
         }
 
 
