@@ -1,12 +1,14 @@
 package com.example.calum.honoursproject;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.location.Location;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,21 +18,50 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.ProgressCallback;
+import com.parse.SaveCallback;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class PostFragment extends Fragment {
+public class PostFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     ImageView userImage;
     Bitmap picture;
     int REQUEST_CAMERA = 1888, SELECT_FILE = 1;
+    Button post;
+    private Location mLastLocation;
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        buildGoogleApiClient();
+        mGoogleApiClient.connect();
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_post, container, false);
+    }
+
+    private synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
     }
 
     @Override
@@ -40,13 +71,64 @@ public class PostFragment extends Fragment {
         // Get UI elements
         final FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         userImage = (ImageView) getActivity().findViewById(R.id.imageView);
-
+        userImage.setTag("Default");
+        post = (Button) getActivity().findViewById(R.id.postButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImage();
             }
         });
+
+        post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postUpload();
+            }
+        });
+    }
+
+    private void postUpload() {
+        displayLocation();
+        if (mLastLocation == null) {
+            noGPS();
+        } else {
+            if (userImage.getTag().equals("Default")) {
+                noImage();
+            } else {
+                ParseObject post = new ParseObject("PhotoTest");
+                post.put("user", ParseUser.getCurrentUser().getUsername());
+                post.put("lat", mLastLocation.getLatitude());
+                post.put("lon", mLastLocation.getLongitude());
+                post.put("platform", "Android");
+
+                // Image
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] image = stream.toByteArray();
+                ParseFile pFile = new ParseFile("UserImage.png", image);
+                post.put("image", pFile);
+
+                post.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        OkAlert successAlert = new OkAlert(getContext(), "Post Complete", "Your post has been uploaded successfully");
+                        successAlert.show();
+                        userImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera));
+                    }
+                });
+            }
+        }
+    }
+
+    private void noImage() {
+        OkAlert imageAlert = new OkAlert(getContext(), "Image Required", "Please select an image");
+        imageAlert.show();
+    }
+
+    private void noGPS() {
+        OkAlert gpsAlert = new OkAlert(getContext(), "GPS Required", "You must enable GPS to upload a post.");
+        gpsAlert.show();
     }
 
     private void selectImage() {
@@ -93,6 +175,7 @@ public class PostFragment extends Fragment {
 
             // Change imageView to display the new picture
             userImage.setImageBitmap(picture);
+            userImage.setTag("Changed Photo");
         }
     }
 
@@ -178,5 +261,29 @@ public class PostFragment extends Fragment {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private void displayLocation() {
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        if (mLastLocation != null) {
+            double latitude = mLastLocation.getLatitude();
+            double longitude = mLastLocation.getLongitude();
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        displayLocation();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 }

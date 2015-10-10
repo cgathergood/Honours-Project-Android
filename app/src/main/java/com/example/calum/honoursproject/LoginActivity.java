@@ -91,7 +91,7 @@ public class LoginActivity extends ActionBarActivity {
                 if (parseUser != null) {
                     Toast.makeText(getApplicationContext(), "You are logged in " + ParseUser.getCurrentUser().getUsername() + "!", Toast.LENGTH_SHORT).show();
                     progress.dismiss();
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, TabActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
