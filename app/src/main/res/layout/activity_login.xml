@@ -38,8 +38,7 @@
         android:layout_marginTop="39dp"
         android:editable="true"
         android:hint="@string/username"
-        android:singleLine="true"
-        android:text="cg" />
+        android:singleLine="true" />
 
     <EditText
         android:id="@+id/passwordText"
@@ -50,8 +49,7 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
-        android:singleLine="true"
-        android:text="c" />
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/loginButton"
@@ -66,18 +64,18 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/loginButton"
-        android:layout_below="@+id/loginButton"
-        android:layout_marginTop="41dp"
         android:text="@string/loginToSignUp"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginTop="55dp"
+        android:layout_below="@+id/loginButton"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/signUpButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/signUp"
         android:layout_below="@+id/textView3"
-        android:layout_centerHorizontal="true"
-        android:text="@string/signUp" />
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

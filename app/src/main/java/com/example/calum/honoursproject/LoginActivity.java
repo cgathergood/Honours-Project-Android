@@ -33,7 +33,6 @@ public class LoginActivity extends ActionBarActivity {
         loginButton = (Button) findViewById(R.id.loginButton);
         username = (EditText) findViewById(R.id.usernameText);
         password = (EditText) findViewById(R.id.passwordText);
-        designButton = (Button) findViewById(R.id.button);
 
         //Check for existing user logged in
         if (ParseUser.getCurrentUser() != null) {
@@ -63,15 +62,6 @@ public class LoginActivity extends ActionBarActivity {
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
                 finish();
-            }
-        });
-
-        // Temporary design button
-        designButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, TabActivity.class);
-                startActivity(intent);
             }
         });
     }
