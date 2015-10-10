@@ -19,7 +19,6 @@ public class LoginActivity extends ActionBarActivity {
 
     Button loginButton;
     Button signUpButton;
-    Button designButton;
     EditText username;
     EditText password;
     String usernametxt, passwordtxt;
