@@ -88,17 +88,19 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
             noGPS();
         } else {
             if(userImage.getTag().equals("Default")){
-                Toast.makeText(getContext(), "The image is default", Toast.LENGTH_SHORT).show();
+                noImage();
             }
         }
     }
 
+    private void noImage() {
+        OkAlert imageAlert = new OkAlert(getContext(), "Image Required", "Please select an image");
+        imageAlert.show();
+    }
+
     private void noGPS() {
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-        alert.setTitle("GPS Required");
-        alert.setMessage("You must enable GPS to upload a post.");
-        alert.setPositiveButton("OK",null);
-        alert.show();
+        OkAlert gpsAlert = new OkAlert(getContext(), "GPS Required", "You must enable GPS to upload a post.");
+        gpsAlert.show();
     }
 
     private void selectImage() {
