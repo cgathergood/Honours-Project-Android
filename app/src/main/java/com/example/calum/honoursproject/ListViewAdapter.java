@@ -48,19 +48,19 @@ public class ListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View v, ViewGroup parent) {
 
         if (inflater == null)
             inflater = (LayoutInflater) activity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (convertView == null)
-            convertView = inflater.inflate(R.layout.list_row, null);
+        if (v == null)
+            v = inflater.inflate(R.layout.list_row, null);
 
 
-        TextView serial = (TextView) convertView.findViewById(R.id.serial);
-        TextView title = (TextView) convertView.findViewById(R.id.title);
-        TextView time = (TextView) convertView.findViewById(R.id.time);
-        final ImageView imageView = (ImageView) convertView.findViewById(R.id.postedImage);
+        TextView serial = (TextView) v.findViewById(R.id.serial);
+        TextView title = (TextView) v.findViewById(R.id.title);
+        TextView time = (TextView) v.findViewById(R.id.time);
+        final ImageView imageView = (ImageView) v.findViewById(R.id.postedImage);
 
         serial.setText(postList.get(position).getString("user"));
         title.setText(postList.get(position).getString("platform"));
@@ -77,7 +77,7 @@ public class ListViewAdapter extends BaseAdapter {
             }
         });
 
-        return convertView;
+        return v;
     }
 
 }

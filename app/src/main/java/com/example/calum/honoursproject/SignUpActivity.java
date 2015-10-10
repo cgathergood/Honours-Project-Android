@@ -2,8 +2,8 @@ package com.example.calum.honoursproject;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,7 +85,7 @@ public class SignUpActivity extends ActionBarActivity {
                     Toast.makeText(getApplicationContext(), "Thanks for signing up " + user.getUsername(), Toast.LENGTH_SHORT).show();
                     progress.dismiss();
                 } else {
-                    Toast.makeText(getApplicationContext(), e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     progress.dismiss();
                 }
             }

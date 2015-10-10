@@ -2,9 +2,8 @@ package com.example.calum.honoursproject;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.method.CharacterPickerDialog;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +19,6 @@ public class LoginActivity extends ActionBarActivity {
 
     Button loginButton;
     Button signUpButton;
-    Button designButton;
     EditText username;
     EditText password;
     String usernametxt, passwordtxt;
@@ -34,11 +32,10 @@ public class LoginActivity extends ActionBarActivity {
         loginButton = (Button) findViewById(R.id.loginButton);
         username = (EditText) findViewById(R.id.usernameText);
         password = (EditText) findViewById(R.id.passwordText);
-        designButton = (Button) findViewById(R.id.button);
 
         //Check for existing user logged in
         if (ParseUser.getCurrentUser() != null) {
-            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            Intent intent = new Intent(LoginActivity.this, TabActivity.class);
         }
 
 
@@ -64,15 +61,6 @@ public class LoginActivity extends ActionBarActivity {
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
                 finish();
-            }
-        });
-
-        // Temporary design button
-        designButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, TabActivity.class);
-                startActivity(intent);
             }
         });
     }

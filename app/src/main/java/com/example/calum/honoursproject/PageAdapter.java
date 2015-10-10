@@ -20,14 +20,11 @@ public class PageAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                FeedFragment feedTab = new FeedFragment();
-                return feedTab;
+                return new FeedFragment();
             case 1:
-                PostFragment postTab = new PostFragment();
-                return postTab;
+                return new PostFragment();
             case 2:
-                MapFragment mapTab = new MapFragment();
-                return mapTab;
+                return new MapFragment();
             default:
                 return null;
         }

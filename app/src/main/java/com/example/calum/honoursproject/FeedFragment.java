@@ -2,7 +2,6 @@ package com.example.calum.honoursproject;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,7 +12,6 @@ import android.widget.ListView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -22,7 +20,6 @@ import java.util.List;
 
 public class FeedFragment extends Fragment {
 
-    private ListView listView;
     private ListViewAdapter adapter;
     private List<ParseObject> postList;
 
@@ -55,7 +52,7 @@ public class FeedFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        listView = (ListView) v.findViewById(R.id.listView);
+        ListView listView = (ListView) v.findViewById(R.id.listView);
 
         postList = new ArrayList<>();
 
@@ -69,7 +66,6 @@ public class FeedFragment extends Fragment {
     private void getPosts() {
         ParseQuery<ParseObject> query = new ParseQuery<>("PhotoTest");
         query.orderByDescending("createdAt");
-        //query.setLimit(1);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
