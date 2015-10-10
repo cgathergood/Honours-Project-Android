@@ -75,9 +75,25 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               displayLocation();
+               postUpload();
+
             }
         });
+    }
+
+    private void postUpload() {
+        displayLocation();
+        if (mLastLocation == null){
+            noGPS();
+        }
+    }
+
+    private void noGPS() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setTitle("GPS Required");
+        alert.setMessage("You must enable GPS to upload a post.");
+        alert.setPositiveButton("OK",null);
+        alert.show();
     }
 
     private void selectImage() {
