@@ -63,6 +63,7 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
         // Get UI elements
         final FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
         userImage = (ImageView) getActivity().findViewById(R.id.imageView);
+        userImage.setTag("Default");
         post = (Button) getActivity().findViewById(R.id.postButton);
         post.setEnabled(true);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +76,7 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               postUpload();
+                postUpload();
 
             }
         });
@@ -85,6 +86,10 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
         displayLocation();
         if (mLastLocation == null){
             noGPS();
+        } else {
+            if(userImage.getTag().equals("Default")){
+                Toast.makeText(getContext(), "The image is default", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -140,6 +145,7 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
 
             // Change imageView to display the new picture
             userImage.setImageBitmap(picture);
+            userImage.setTag("Changed Photo");
         }
     }
 
@@ -233,7 +239,6 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
         if(mLastLocation != null){
             double latitude = mLastLocation.getLatitude();
             double longitude = mLastLocation.getLongitude();
-            Toast.makeText(getContext(), latitude + ", " + longitude, Toast.LENGTH_SHORT).show();
         }
     }
 
