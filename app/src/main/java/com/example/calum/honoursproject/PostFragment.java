@@ -26,7 +26,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.ProgressCallback;
+import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class PostFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -89,6 +96,26 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
         } else {
             if(userImage.getTag().equals("Default")){
                 noImage();
+            } else {
+                ParseObject post = new ParseObject("PhotoTest");
+                post.put("user", ParseUser.getCurrentUser().getUsername());
+                post.put("lat", mLastLocation.getLatitude());
+                post.put("lon", mLastLocation.getLongitude());
+                post.put("platform", "Android");
+
+                // Image
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] image = stream.toByteArray();
+                ParseFile pFile = new ParseFile("UserImage.png", image);
+                post.put("image", pFile);
+
+                post.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+
+                    }
+                });
             }
         }
     }
