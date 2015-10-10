@@ -1,6 +1,7 @@
 package com.example.calum.honoursproject;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -72,7 +73,6 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
         userImage = (ImageView) getActivity().findViewById(R.id.imageView);
         userImage.setTag("Default");
         post = (Button) getActivity().findViewById(R.id.postButton);
-        post.setEnabled(true);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,17 +84,16 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
             @Override
             public void onClick(View v) {
                 postUpload();
-
             }
         });
     }
 
     private void postUpload() {
         displayLocation();
-        if (mLastLocation == null){
+        if (mLastLocation == null) {
             noGPS();
         } else {
-            if(userImage.getTag().equals("Default")){
+            if (userImage.getTag().equals("Default")) {
                 noImage();
             } else {
                 ParseObject post = new ParseObject("PhotoTest");
@@ -113,7 +112,9 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
                 post.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-
+                        OkAlert successAlert = new OkAlert(getContext(), "Post Complete", "Your post has been uploaded successfully");
+                        successAlert.show();
+                        userImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera));
                     }
                 });
             }
@@ -262,10 +263,10 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
         }
     }
 
-    private void displayLocation(){
+    private void displayLocation() {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-        if(mLastLocation != null){
+        if (mLastLocation != null) {
             double latitude = mLastLocation.getLatitude();
             double longitude = mLastLocation.getLongitude();
         }

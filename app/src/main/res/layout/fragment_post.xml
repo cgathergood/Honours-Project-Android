@@ -37,7 +37,6 @@
         android:text="@string/tab_post"
         android:id="@+id/postButton"
         android:layout_below="@+id/imageView"
-        android:layout_centerHorizontal="true"
-        android:enabled="false" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
