@@ -1,6 +1,7 @@
 package com.example.calum.honoursproject;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -91,6 +92,13 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
             if (userImage.getTag().equals("Default")) {
                 noImage();
             } else {
+
+                // Progress dialog
+                final ProgressDialog progress = new ProgressDialog(getActivity());
+                progress.setTitle("Uploading your post");
+                progress.setMessage("Please wait...");
+                progress.show();
+
                 ParseObject post = new ParseObject("PhotoTest");
                 post.put("user", ParseUser.getCurrentUser().getUsername());
                 post.put("lat", mLastLocation.getLatitude());
@@ -107,9 +115,16 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
                 post.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        OkAlert successAlert = new OkAlert(getContext(), "Post Complete", "Your post has been uploaded successfully");
-                        successAlert.show();
-                        userImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera));
+                        if(e != null){
+                            progress.dismiss();
+                            OkAlert failAlert = new OkAlert(getContext(), "Post Failed", "Your post has failed to upload. Please try again");
+                            failAlert.show();
+                        } else {
+                            progress.dismiss();
+                            OkAlert successAlert = new OkAlert(getContext(), "Post Complete", "Your post has been uploaded successfully");
+                            successAlert.show();
+                            userImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_camera));
+                        }
                     }
                 });
             }
