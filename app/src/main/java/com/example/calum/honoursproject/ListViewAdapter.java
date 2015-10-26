@@ -16,8 +16,11 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Calum on 01/10/2015.
@@ -66,7 +69,8 @@ public class ListViewAdapter extends BaseAdapter {
         title.setText(postList.get(position).getString("platform"));
 
         Date createdDate = postList.get(position).getCreatedAt();
-        time.setText(createdDate.toString());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E MMM d hh:mm", Locale.ENGLISH);
+        time.setText(simpleDateFormat.format(createdDate));
 
         ParseFile image = (ParseFile) postList.get(position).get("image");
         image.getDataInBackground(new GetDataCallback() {

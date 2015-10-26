@@ -44,9 +44,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/time"
-        android:layout_alignBaseline="@+id/title"
-        android:layout_alignBottom="@+id/title"
-        android:layout_alignParentEnd="true"
-        tools:text="Created at"/>
+        tools:text="Created at"
+        android:layout_alignTop="@+id/title"
+        android:layout_alignEnd="@+id/postedImage" />
 
 </RelativeLayout>
