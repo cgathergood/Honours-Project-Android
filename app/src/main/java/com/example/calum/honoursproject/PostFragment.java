@@ -64,11 +64,11 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
         super.onViewCreated(view, savedInstanceState);
 
         // Get UI elements
-        final FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        final Button imageButton = (Button) getActivity().findViewById(R.id.selectPhotoButton);
         userImage = (ImageView) getActivity().findViewById(R.id.imageView);
         userImage.setTag("Default");
         post = (Button) getActivity().findViewById(R.id.postButton);
-        fab.setOnClickListener(new View.OnClickListener() {
+        imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImage();
