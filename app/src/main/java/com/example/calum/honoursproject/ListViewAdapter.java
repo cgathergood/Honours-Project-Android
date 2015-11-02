@@ -11,6 +11,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -29,6 +32,8 @@ public class ListViewAdapter extends BaseAdapter {
     private Activity activity;
     private LayoutInflater inflater;
     private List<ParseObject> postList;
+    protected ImageLoader imageLoader = ImageLoader.getInstance();
+    private DisplayImageOptions displayImageOptions;
 
     public ListViewAdapter(Activity activity, List<ParseObject> postList) {
         this.activity = activity;
@@ -53,6 +58,14 @@ public class ListViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View v, ViewGroup parent) {
 
+        imageLoader = ImageLoader.getInstance();
+        displayImageOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .showImageForEmptyUri(R.drawable.ic_camera)
+                .showImageOnFail(R.drawable.ic_camera)
+                .showImageOnLoading(R.drawable.ic_camera).build();
+
         if (inflater == null)
             inflater = (LayoutInflater) activity
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -73,11 +86,10 @@ public class ListViewAdapter extends BaseAdapter {
         time.setText(simpleDateFormat.format(createdDate));
 
         ParseFile image = (ParseFile) postList.get(position).get("image");
-        image.getDataInBackground(new GetDataCallback() {
+        imageLoader.displayImage(image.getUrl(), imageView, displayImageOptions, new SimpleImageLoadingListener(){
             @Override
-            public void done(byte[] bytes, ParseException e) {
-                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                imageView.setImageBitmap(bmp);
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                super.onLoadingComplete(imageUri, view, loadedImage);
             }
         });
 

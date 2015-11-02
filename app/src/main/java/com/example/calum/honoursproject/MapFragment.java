@@ -44,7 +44,9 @@ public class MapFragment extends Fragment {
         setHasOptionsMenu(true);
 
         imageLoader = ImageLoader.getInstance();
-        displayImageOptions = new DisplayImageOptions.Builder().cacheInMemory(true)
+        displayImageOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
                 .showImageForEmptyUri(R.drawable.ic_camera)
                 .showImageOnFail(R.drawable.ic_camera)
                 .showImageOnLoading(R.drawable.ic_camera).build();
