@@ -19,7 +19,7 @@
     <string name="welcome">Welcome!</string>
     <string name="gpsButton">GPS</string>
     <string name="photoDescription">User Selected Image</string>
-    <string name="selectPhoto">Select Photo</string>
+    <string name="selectPhoto">Select Image</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="title_activity_tab">InstaMap</string>
     <string name="tab_feed">Feed</string>
