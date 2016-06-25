@@ -3,7 +3,6 @@ package com.example.calum.honoursproject;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,9 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.parse.GetDataCallback;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -86,7 +82,7 @@ public class ListViewAdapter extends BaseAdapter {
         time.setText(simpleDateFormat.format(createdDate));
 
         ParseFile image = (ParseFile) postList.get(position).get("image");
-        imageLoader.displayImage(image.getUrl(), imageView, displayImageOptions, new SimpleImageLoadingListener(){
+        imageLoader.displayImage(image.getUrl(), imageView, displayImageOptions, new SimpleImageLoadingListener() {
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                 super.onLoadingComplete(imageUri, view, loadedImage);
