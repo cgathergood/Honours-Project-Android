@@ -13,7 +13,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,7 +114,7 @@ public class PostFragment extends Fragment implements GoogleApiClient.Connection
                 post.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        if(e != null){
+                        if (e != null) {
                             progress.dismiss();
                             OkAlert failAlert = new OkAlert(getContext(), "Post Failed", "Your post has failed to upload. Please try again");
                             failAlert.show();

@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "21.1.1"
+    compileSdkVersion 24
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "com.example.calum.honoursproject"
@@ -21,10 +21,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:design:23.0.1'
-    compile 'com.google.android.gms:play-services:7.5.0'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:design:24.0.0'
+    compile 'com.google.android.gms:play-services-maps:9.0.2'
+    compile 'com.google.android.gms:play-services-location:9.0.2'
     compile files('libs/Parse-1.10.2/bolts-android-1.2.1.jar')
     compile files('libs/Parse-1.10.2/Parse-1.10.2.jar')
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 }
